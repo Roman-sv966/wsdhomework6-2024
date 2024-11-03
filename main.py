@@ -1,9 +1,20 @@
-# main.py
 import sys
+import os
+import importlib
 from decimal import Decimal, InvalidOperation
 from calculator.command_registry import command_registry  # Import the registry
-import calculator.command  # Import command to ensure commands are registered
 import multiprocessing
+
+
+def load_plugins():
+    """
+    Dynamically loads all command plugins from the plugins folder.
+    """
+    plugins_dir = os.path.join(os.path.dirname(__file__), 'calculator', 'plugins')
+    for filename in os.listdir(plugins_dir):
+        if filename.endswith('.py') and filename != '__init__.py':
+            module_name = f"calculator.plugins.{filename[:-3]}"  # Remove .py extension
+            importlib.import_module(module_name)  # Dynamically import the module
 
 
 def perform_calculation_and_display(value1, value2, operation_type):
@@ -45,20 +56,27 @@ def perform_calculation_and_display(value1, value2, operation_type):
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
 
+def display_menu():
+    """
+    Displays the list of available commands.
+    """
+    print("Available commands:", ", ".join(command_registry.keys()))
+
 def repl():
     """
     Interactive REPL loop for the calculator using command pattern.
     """
-    print("Welcome to the Interactive Calculator. Type 'exit' to quit.")
-
-    # Print command names only
-    print("Available commands:", ", ".join(command_registry.keys()))
+    print("Welcome to the Interactive Calculator. Type 'exit' to quit or 'menu' to see available commands.")
+    display_menu()  # Display menu at the start
 
     while True:
         user_input = input("Enter command (e.g., 'add 5 3'): ").strip()
         if user_input.lower() == 'exit':
             print("Goodbye!")
             break
+        elif user_input.lower() == 'menu':
+            display_menu()
+            continue
         parts = user_input.split()
         if len(parts) < 3:
             print("Invalid input format. Use: <operation> <num1> <num2>")
@@ -71,6 +89,9 @@ def main():
     """
     Main function to either process command-line arguments or start the REPL loop.
     """
+    # Load plugins dynamically at startup
+    load_plugins()
+
     # If command-line arguments are provided, execute once and exit
     if len(sys.argv) == 4:
         _, value1, value2, operation_type = sys.argv
