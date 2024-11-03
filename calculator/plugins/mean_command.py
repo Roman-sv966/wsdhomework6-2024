@@ -1,4 +1,5 @@
 # calculator/plugins/add_command.py
+
 from decimal import Decimal
 from calculator.command import Command
 from calculator.command_registry import register_command
