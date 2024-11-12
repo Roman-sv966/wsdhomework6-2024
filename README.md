@@ -1,8 +1,11 @@
-# Homework-5 : 2024
+# Homework-6 : 2024
 
-# Multiprocessing-Enabled Interactive Calculator
+# Multiprocessing-Enabled Interactive Calculator With Devops, Cloud Computing, Environment Variables, Logging, and Continuous Integration
 
 This project is an interactive, command-line calculator that supports essential arithmetic operations with optional multiprocessing for enhanced efficiency. The calculator can operate in both interactive and direct command-line modes, and it’s designed to be flexible and easily extendable.
+
+# Logs sample
+![Build Process Screenshot](./tests/logs__sample.png)
 
 ## Key Features
 
